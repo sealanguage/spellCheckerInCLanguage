@@ -20,37 +20,36 @@ typedef struct trieNode
    struct trieNode *children[N];
    //  struct node* next is single list, struct node* children is the way to do the same thing for the trie
 
-   int value;
+   int nodeValue; //  the value of the letter to put in the node
    struct trieNode *next;
    int occurrences; //  probably will be misspellings later
 } trieNode;
 
 // Represents a trie ******* is this needed
-trieNode *root;
-// trieNode *nav
-// trieNode *parent = NULL;
+trieNode *newNode;
+trieNode *rootNode;
+//  parent = NULL;
 int occurrences = 0; //  probably will be misspellings later
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
    // Initialize trie
-   root = malloc(sizeof(trieNode));
-
-   //  assign a traveller to the root
-   trieNode *trav = root;
-   if (root == NULL)
+   newNode = malloc(sizeof(trieNode));
+   for (int i = 0; i < N; i++)
    {
+      newNode->children[i] = NULL; //   all set 27 pointers to NULL
+   }
+
+   if (newNode == NULL)
+   {
+      rootNode = newNode;
+      newNode->is_word = false;
       return false;
    }
    // set the is_word boolean to false for all the childern of the node
-   root->is_word = false;
+
    //  create 27 children pointers of [N]
-   for (int i = 0; i < N; i++)
-   {
-      //   all set to NULL
-      root->children[i] = NULL;
-   }
 
    // Open dictionary
    FILE *file = fopen(dictionary, "r");
@@ -72,21 +71,21 @@ bool load(const char *dictionary)
       printf("\nthe word is %s\n\n", word);
       //         printf("get a letter from the word %s\n", word);
       // TODO
+      //
+      //
+      //
+      //
+      // HERE HERE HERE HERE HERE HERE TO MALLOC NEW NODES AND INSERT THE VALUE, MOVE TRAV
       int letterPosition;
       int wordLength = strlen(word);
       int alphaPointer = 0;
-
+      //  assign a traveller to the root
+      trieNode *trav = rootNode;
       //  create a variable to create new nodes called newNode
       //          trieNode *navig = root;
       //         trieNode* newNode = (trieNode*)malloc(sizeof(trieNode));
       // for the first node in the trie,
       //  for each letter in the word
-      trieNode *newNode = malloc(sizeof(trieNode)); //  malloc a new trieNode
-      for (int i = 0; i < N; i++)                   //  put in 27 pointers and s
-      {
-         //   all set to NULL
-         newNode->children[i] = NULL;
-      } //  set all 27 pointers to null
 
       //  iterate through the letters in the word
       for (letterPosition = 0; letterPosition < wordLength; letterPosition++)
@@ -104,27 +103,36 @@ bool load(const char *dictionary)
          //  if no node exists at this location
          if (newNode->children[alphaPointer] == NULL)
          {
+            printf("newNode->children[alphapointer] conditional started");
+            //                 struct trieNode* currentNode;
+            //                     struct trieNode currentNode;
+            //
             trieNode *currentNode = malloc(sizeof(trieNode)); //  malloc a new trieNode
             for (int i = 0; i < N; i++)                       //  put in 27 pointers and s
             {
                //   all set to NULL
                currentNode->children[i] = NULL;
                //                     currentNode->children[i]->value = alphaPointer;
-
+               printf("the value of alphapointer is %d\n", alphaPointer);
             } //  set all 27 pointers to null
-            printf("the value of alphapointer is %d\n", alphaPointer);
+
+            //
+            //  put the value of the letter position into the node
+
             printf("!!!    new trie node made her      !!!\n");
 
             //  tell the node to load at the pointerIndex location
             trav = newNode->children[alphaPointer];
-            printf("the value of alphapointer is %d\n", alphaPointer);
+            // print statement shows that the loop iterates through the different letters of the dictionary
+            printf("alphaPointer value is %i\n\n", alphaPointer);
+            //                 printf("trav is %c", trav->children[alphaPointer]);
 
             // NEED TO PUT THE CHARACTER INTO THE NEWNODE OF THE TRIE
-            //  THEN CYCLE BACK UP TO ROOT TO START FOLLOWING THE TRIE AGAIN recursively
+            //  THEN CYCLE BACK UP TO ROOT TO START FOLLOWING THE TRIE AGAIN
             continue;
 
             //
-            if (newNode->children[alphaPointer] != NULL)
+            while (newNode->children[alphaPointer] != NULL)
             {
                printf("moving to next letter");
 
